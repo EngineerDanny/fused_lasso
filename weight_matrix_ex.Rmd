@@ -6,21 +6,8 @@ library(mlr3resampling)
 
 # Get scores from benchmark results and process
 score.dt <- as.data.table(mlr3resampling::score(bmr))
-score.dt <- score.dt[algorithm == "fuser" & train.subsets == "all"]
-
-# Helper function for processing fuser model weights
-process_fuser_weights <- function(fuser_model) {
-  if (is.null(fuser_model) || 
-      is.null(fuser_model$model_type) || 
-      fuser_model$model_type != "fuser") {
-    return(NULL)
-  }
-  
-  if (is.matrix(fuser_model$beta)) {
-    return(fuser_model$beta)
-  }
-  return(NULL)
-}
+score.dt <- score.dt[algorithm == "tuned" & train.subsets == "all"]
+#score.dt <- score.dt[algorithm == "fuser" & train.subsets == "all"]
 
 # New function to analyze coefficient patterns
 analyze_coefficient_patterns <- function(row_values) {
@@ -69,7 +56,10 @@ for (taxa in unique(score.dt$task_id)) {
   
   if (nrow(fuser_results) > 0) {
     fuser_model <- fuser_results$learner[[1]]$model
-    fuser_matrix <- process_fuser_weights(fuser_model)
+    typeof(fuser_model$learner$model$beta) 
+    #fuser_model$learner$model$beta
+    fuser_matrix <- as.matrix(fuser_model$learner$model$beta)
+    #fuser_matrix <- process_fuser_weights(fuser_model)
     
     if (!is.null(fuser_matrix)) {
       features <- rownames(fuser_matrix)
@@ -220,6 +210,7 @@ print_group_comparison_summary <- function(results) {
 
 # Example usage:
 results <- analyze_group_pairs(fuser_matrix)
+results$weight_changes
 # print_group_comparison_summary(results)
 
 # Save results to file

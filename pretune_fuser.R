@@ -234,23 +234,23 @@ withr::with_seed(42, {
   #  fallback = mlr3::LearnerRegrFeatureless$new()
   #)
   reg.learner.list <- list(
-    glmnet_learner,
+    #glmnet_learner,
     #fuser_learner,
-    #fuser.learner.tuned,
+    fuser.learner.tuned,
     mlr3::LearnerRegrFeatureless$new()
   )
   
   
   mycv <- mlr3resampling::ResamplingSameOtherSizesCV$new()
   mycv$param_set$values$folds=5
-  mycv$param_set$values$subsets = "S"
+  mycv$param_set$values$subsets = "A"
   future::plan("sequential")
   (reg.bench.grid <- mlr3::benchmark_grid(
     task.list,
     reg.learner.list,
     mycv))
   
-  reg.dir <- paste0(dataname, "_16_05_same")
+  reg.dir <- paste0(dataname, "_16_05")
   reg <- batchtools::loadRegistry(reg.dir)
   
   unlink(reg.dir, recursive=TRUE)
@@ -322,5 +322,5 @@ score.tall$algorithm <- factor(score.tall$algorithm,
 score.tall[, log_regr.mse := log10(regr.mse)]
 fwrite(score.tall, paste0( "/projects/genomic-ml/da2343/necromass/", dataname, "_16_05_same.score.tall.csv" ) )
 
-#save(bmr, file=paste0("/projects/genomic-ml/da2343/necromass/", dataname, "_16_05-bmr.RData"))
+save(bmr, file=paste0("/projects/genomic-ml/da2343/necromass/", dataname, "_16_05-bmr.RData"))
 

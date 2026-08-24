@@ -198,8 +198,8 @@ glmnet_learner$fallback <- mlr3::LearnerRegrFeatureless$new()
 glmnet_learner$encapsulate <- c(train = "evaluate", predict = "evaluate")
 
 reg.learner.list <- list(
-  glmnet_learner,
-  mlr3::LearnerRegrFeatureless$new(),
+  #glmnet_learner,
+  #mlr3::LearnerRegrFeatureless$new(),
   LearnerRegrFuser$new()
 )
 
@@ -229,6 +229,7 @@ future::plan("sequential")
   mycv))
 
 reg.dir <- "necromass_29_04"
+reg.dir <- "/projects/genomic-ml/da2343/necromass/necromass_16_05_same"
 reg <- batchtools::loadRegistry(reg.dir)
 unlink(reg.dir, recursive=TRUE)
 reg = batchtools::makeExperimentRegistry(
@@ -259,6 +260,9 @@ jobs.after[!is.na(error), .(error, task_id=sapply(prob.pars, "[[", "task_id"))][
 ## 1: Kaistia
 ## 2: Kaistia
 
-save(bmr, file="/projects/genomic-ml/da2343/necromass/necromass_29_04-benchmark.RData")
+ids <- jobs.after[is.na(error), job.id]
+
+bmr = mlr3batchmark::reduceResultsBatchmark(ids, reg = reg)
+save(bmr, file="/projects/genomic-ml/da2343/necromass/necromass_16_05-benchmark.RData")
 
 
