@@ -181,18 +181,17 @@ reg.bench.grid <- data.table::rbindlist(
 
 ## Submit the benchmark jobs.
 reg.dir <- paste0(dataname, "_target_exempt_clr")
-reg <- batchtools::loadRegistry(reg.dir)
 unlink(reg.dir, recursive = TRUE)
 reg <- batchtools::makeExperimentRegistry(
   file.dir = reg.dir,
   seed = 1,
+  source = "/projects/genomic-ml/da2343/necromass/l2_fusion.R",
   packages = c(
     "data.table", "mlr3", "mlr3learners", "mlr3misc",
     "mlr3resampling", "mlr3tuning", "mlr3batchmark",
     "R6", "paradox", "checkmate", "glmnet", "Matrix"
   )
 )
-reg$source <- "/projects/genomic-ml/da2343/necromass/l2_fusion.R"
 
 mlr3batchmark::batchmark(
   reg.bench.grid,
