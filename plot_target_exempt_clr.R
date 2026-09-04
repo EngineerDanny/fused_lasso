@@ -53,26 +53,11 @@ gg <- ggplot(plot.dt, aes(comparison, mse_difference)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray40") +
   geom_boxplot(
     width = 0.45,
-    outlier.shape = NA,
-    fill = "#DCE6F1",
-    color = "#2F5597"
+    outlier.shape = NA
   ) +
   geom_jitter(
     width = 0.10,
-    height = 0,
-    shape = 21,
-    size = 2.2,
-    stroke = 0.5,
-    fill = "#4472C4",
-    color = "white"
-  ) +
-  stat_summary(
-    fun = mean,
-    geom = "point",
-    shape = 23,
-    size = 3.2,
-    fill = "#ED7D31",
-    color = "black"
+    height = 0
   ) +
   scale_y_continuous(
     "MSE difference",
@@ -85,16 +70,7 @@ gg <- ggplot(plot.dt, aes(comparison, mse_difference)) +
       dataname,
       ": each point is the mean test MSE difference for one taxon"
     ),
-    caption = "Values above zero favor fuser. Diamonds show means."
-  ) +
-  theme_bw() +
-  theme(
-    legend.position = "none",
-    panel.grid.minor = element_blank(),
-    panel.grid.major.x = element_blank(),
-    plot.title = element_text(hjust = 0.5),
-    plot.subtitle = element_text(hjust = 0.5),
-    axis.text.x = element_text(angle = 20, hjust = 1)
+    caption = "Values above zero favor fuser."
   )
 
 print(gg)
