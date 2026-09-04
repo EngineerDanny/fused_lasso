@@ -1,20 +1,25 @@
 library(data.table)
 library(ggplot2)
 
-dataname <- "TwinsUK"
-
-score.tall <- fread(
-  paste0(
-    "/projects/genomic-ml/da2343/necromass/",
-    dataname,
-    "_target_exempt_clr.score.tall.csv"
-  )
+datanames <- c("MovingPictures", "TwinsUK", "necromass")
+score.files <- paste0(
+  "/projects/genomic-ml/da2343/necromass/",
+  datanames,
+  "_target_exempt_clr.score.tall.csv"
 )
+names(score.files) <- datanames
+score.files <- score.files[file.exists(score.files)]
+
+score.tall <- rbindlist(lapply(names(score.files), function(dataset.name) {
+  score.dt <- fread(score.files[[dataset.name]])
+  score.dt[, dataset := dataset.name]
+  score.dt
+}))
 
 ## Put the four models on the same row for each test split and taxon.
 score.wide <- dcast(
   score.tall,
-  test.fold + test.subset + task_id ~ model,
+  dataset + test.fold + test.subset + task_id ~ model,
   value.var = "regr.mse",
   fun.aggregate = mean
 )
@@ -28,11 +33,11 @@ score.wide[, `:=`(
 taxon.differences <- score.wide[, .(
   `glmnet all - fuser` = mean(glmnet_all),
   `glmnet same - fuser` = mean(glmnet_same)
-), by = task_id]
+), by = .(dataset, task_id)]
 
 plot.dt <- melt(
   taxon.differences,
-  id.vars = "task_id",
+  id.vars = c("dataset", "task_id"),
   variable.name = "comparison",
   value.name = "mse_difference"
 )
@@ -59,6 +64,7 @@ gg <- ggplot(plot.dt, aes(comparison, mse_difference)) +
     width = 0.10,
     height = 0
   ) +
+  facet_wrap(~dataset, scales = "free_y") +
   scale_y_continuous(
     "MSE difference",
     expand = expansion(mult = c(0.08, 0.12))
@@ -66,19 +72,16 @@ gg <- ggplot(plot.dt, aes(comparison, mse_difference)) +
   scale_x_discrete(NULL) +
   labs(
     title = "Prediction performance after target exempt CLR",
-    subtitle = paste0(
-      dataname,
-      ": each point is the mean test MSE difference for one taxon"
-    ),
+    subtitle = "Each point is the mean test MSE difference for one taxon",
     caption = "Values above zero favor fuser."
   )
 
 print(gg)
 
 ggsave(
-  paste0(dataname, "_target_exempt_clr_mse_difference.png"),
+  "target_exempt_clr_mse_difference.png",
   gg,
-  width = 7,
+  width = 10,
   height = 5,
   dpi = 500
 )
