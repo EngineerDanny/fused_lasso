@@ -13,7 +13,7 @@ set.seed(42)
 
 source("/projects/genomic-ml/da2343/necromass/l2_fusion.R")
 
-dataname <- "MovingPictures"
+dataname <- "TwinsUK"
 task.dt <- data.table::fread(
   paste0("/projects/genomic-ml/da2343/ml_project_1/data/microbe_ds/",
          dataname, "_11_15.csv")

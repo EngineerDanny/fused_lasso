@@ -4,7 +4,7 @@ library(mlr3resampling)
 library(mlr3batchmark)
 library(batchtools)
 
-dataname <- "MovingPictures"
+dataname <- "TwinsUK"
 reg.dir <- paste0(dataname, "_target_exempt_clr")
 reg <- batchtools::loadRegistry(reg.dir)
 

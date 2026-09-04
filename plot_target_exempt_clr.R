@@ -1,7 +1,7 @@
 library(data.table)
 library(ggplot2)
 
-dataname <- "MovingPictures"
+dataname <- "TwinsUK"
 
 score.tall <- fread(
   paste0(
