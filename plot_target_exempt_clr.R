@@ -22,14 +22,12 @@ score.wide <- dcast(
 ## Positive differences mean that fuser has lower prediction error.
 score.wide[, `:=`(
   glmnet_all = glmnet_all_comp - fuser_all_comp,
-  glmnet_same = glmnet_same_comp - fuser_all_comp,
-  featureless = featureless_same_comp - fuser_all_comp
+  glmnet_same = glmnet_same_comp - fuser_all_comp
 )]
 
 taxon.differences <- score.wide[, .(
   `glmnet all - fuser` = mean(glmnet_all),
-  `glmnet same - fuser` = mean(glmnet_same),
-  `featureless - fuser` = mean(featureless)
+  `glmnet same - fuser` = mean(glmnet_same)
 ), by = task_id]
 
 plot.dt <- melt(
@@ -43,13 +41,11 @@ plot.dt[, comparison := factor(
   comparison,
   levels = c(
     "glmnet all - fuser",
-    "glmnet same - fuser",
-    "featureless - fuser"
+    "glmnet same - fuser"
   ),
   labels = c(
     "glmnet all minus fuser",
-    "glmnet same minus fuser",
-    "featureless minus fuser"
+    "glmnet same minus fuser"
   )
 )]
 
@@ -109,11 +105,4 @@ ggsave(
   width = 7,
   height = 5,
   dpi = 500
-)
-
-ggsave(
-  paste0(dataname, "_target_exempt_clr_mse_difference.pdf"),
-  gg,
-  width = 7,
-  height = 5
 )
