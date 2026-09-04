@@ -35,8 +35,19 @@ score.dt[, model := data.table::fcase(
 score.dt <- score.dt[!is.na(model)]
 score.dt[, log_regr.mse := log10(regr.mse)]
 
+score.out <- score.dt[, .(
+  task_id,
+  learner_id,
+  train.subsets,
+  test.fold,
+  test.subset,
+  regr.mse,
+  model,
+  log_regr.mse
+)]
+
 fwrite(
-  score.dt,
+  score.out,
   paste0(
     "/projects/genomic-ml/da2343/necromass/",
     dataname,
