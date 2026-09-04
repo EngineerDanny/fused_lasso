@@ -15,7 +15,12 @@ table(jobs.after$error)
 jobs.after[!is.na(error)]
 
 ids <- jobs.after[is.na(error), job.id]
-bmr <- mlr3batchmark::reduceResultsBatchmark(ids, reg = reg)
+bmr <- mlr3batchmark::reduceResultsBatchmark(
+  ids,
+  store_backends = FALSE,
+  reg = reg,
+  unmarshal = FALSE
+)
 save(
   bmr,
   file = paste0(
