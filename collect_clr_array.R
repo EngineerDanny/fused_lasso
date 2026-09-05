@@ -24,7 +24,7 @@ if (mode == "prepare") {
     saveRDS(manifest, manifest.file)
   }
   cat(length(manifest), "collection tasks. Submit with:\n")
-  cat(sprintf("sbatch --array=1-%d%%6 collect_clr_array.sbatch\n", length(manifest)))
+  cat(sprintf("sbatch --array=1-%d collect_clr_array.sbatch\n", length(manifest)))
 } else if (mode == "collect") {
   manifest <- readRDS(manifest.file)
   index <- as.integer(Sys.getenv("SLURM_ARRAY_TASK_ID", args[2]))
