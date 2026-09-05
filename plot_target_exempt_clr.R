@@ -78,7 +78,7 @@ gg <- ggplot(plot.dt, aes(comparison, mse_difference)) +
 ggsave(
   "target_exempt_clr_mse_difference.png",
   gg,
-  width = 10,
+  width = 8,
   height = 4,
   dpi = 500
 )
