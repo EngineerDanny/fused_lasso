@@ -6,7 +6,7 @@ library(batchtools)
 
 args <- commandArgs(trailingOnly = TRUE)
 mode <- args[1]
-dataname <- "TwinsUK"
+dataname <- "necromass"
 reg.dir <- paste0(dataname, "_target_exempt_clr")
 parts.dir <- paste0(reg.dir, "_scores")
 manifest.file <- file.path(parts.dir, "manifest.rds")
