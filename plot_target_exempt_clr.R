@@ -72,7 +72,7 @@ gg <- ggplot(plot.dt, aes(comparison, mse_difference)) +
   scale_x_discrete(NULL) +
   labs(
     title = "Prediction performance after target exempt CLR",
-    caption = "Values below zero favor fuser. Panels use different y-axis scales."
+    caption = "Values below zero favor fuser."
   )
 
 ggsave(
