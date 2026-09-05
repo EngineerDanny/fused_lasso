@@ -49,8 +49,8 @@ plot.dt[, comparison := factor(
     "fuser - glmnet same"
   ),
   labels = c(
-    "Large\nRegularization",
-    "Zero\nRegularization"
+    "glmnet_all",
+    "glmnet_same"
   )
 )]
 
@@ -66,13 +66,13 @@ gg <- ggplot(plot.dt, aes(comparison, mse_difference)) +
   ) +
   facet_wrap(~dataset, scales = "free_y") +
   scale_y_continuous(
-    "MSE(Optimal Regularization) - MSE(algorithm)",
+    "MSE(fuser_all) - MSE(algorithm)",
     expand = expansion(mult = c(0.08, 0.12))
   ) +
   scale_x_discrete(NULL) +
   labs(
     title = "Prediction performance after target exempt CLR",
-    caption = "Values below zero favor Optimal Regularization."
+    caption = "Values below zero favor fuser_all."
   )
 
 ggsave(
