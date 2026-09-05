@@ -79,6 +79,6 @@ ggsave(
   "target_exempt_clr_mse_difference.png",
   gg,
   width = 8,
-  height = 4,
+  height = 3,
   dpi = 500
 )
