@@ -24,15 +24,15 @@ score.wide <- dcast(
   fun.aggregate = mean
 )
 
-## Positive differences mean that fuser has lower prediction error.
+## Negative differences mean that fuser has lower prediction error.
 score.wide[, `:=`(
-  glmnet_all = glmnet_all_comp - fuser_all_comp,
-  glmnet_same = glmnet_same_comp - fuser_all_comp
+  glmnet_all = fuser_all_comp - glmnet_all_comp,
+  glmnet_same = fuser_all_comp - glmnet_same_comp
 )]
 
 taxon.differences <- score.wide[, .(
-  `glmnet all - fuser` = mean(glmnet_all),
-  `glmnet same - fuser` = mean(glmnet_same)
+  `fuser - glmnet all` = mean(glmnet_all),
+  `fuser - glmnet same` = mean(glmnet_same)
 ), by = .(dataset, task_id)]
 
 plot.dt <- melt(
@@ -45,12 +45,12 @@ plot.dt <- melt(
 plot.dt[, comparison := factor(
   comparison,
   levels = c(
-    "glmnet all - fuser",
-    "glmnet same - fuser"
+    "fuser - glmnet all",
+    "fuser - glmnet same"
   ),
   labels = c(
-    "glmnet all minus fuser",
-    "glmnet same minus fuser"
+    "glmnet all",
+    "glmnet same"
   )
 )]
 
@@ -66,17 +66,15 @@ gg <- ggplot(plot.dt, aes(comparison, mse_difference)) +
   ) +
   facet_wrap(~dataset, scales = "free_y") +
   scale_y_continuous(
-    "MSE difference",
+    "MSE(fuser) - MSE(algorithm)",
     expand = expansion(mult = c(0.08, 0.12))
   ) +
   scale_x_discrete(NULL) +
   labs(
     title = "Prediction performance after target exempt CLR",
     subtitle = "Each point is the mean test MSE difference for one taxon",
-    caption = "Values above zero favor fuser."
+    caption = "Values below zero favor fuser. Panels use different y-axis scales."
   )
-
-print(gg)
 
 ggsave(
   "target_exempt_clr_mse_difference.png",
