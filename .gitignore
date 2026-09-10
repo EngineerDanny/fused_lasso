@@ -12,3 +12,16 @@
 Algo-Comparison.fig
 HMPv35-18-June-919-benchmark
 *.rds
+
+# Track the revised manuscript and artwork, not build/upload copies.
+!/SAC_JoCB/
+/SAC_JoCB/*
+!/SAC_JoCB/main.tex
+!/SAC_JoCB/main_marked.tex
+!/SAC_JoCB/Liebert_Author_revised.cls
+!/SAC_JoCB/references.bib
+!/SAC_JoCB/sageh.bst
+!/SAC_JoCB/Fig[1-7].png
+!/SAC_JoCB/submission_figures/
+/SAC_JoCB/submission_figures/*
+!/SAC_JoCB/submission_figures/Fig[1-7].eps
